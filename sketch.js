@@ -16,7 +16,7 @@ function setup() {
   myVid = createCapture(VIDEO, videoLoaded);
   guessB = createButton('Guess!');
   guessB.mousePressed(printGuess);
-  guessB.position(900, 175);
+  guessB.position(930, 175);
 }
 
 function videoLoaded() {
@@ -36,7 +36,7 @@ function objectsIded(error, results) {
 }
 
 function draw() {
-  background(220);
+  background(0);
   image(myVid, 0, 0);
 
   //draw bounding box
@@ -48,27 +48,29 @@ function draw() {
   }
 
   //draw score
-  fill(0);
+  fill(0,255,0);
   noStroke();
   textSize(32);
   text("Score: " + score, 960, 100);
 
   //when they press the guess button
   if (guessed) {
-    var x = 750
+    var x = 800
     for (var i = 0; i < objectResults.length; i++) {
-      text(objectResults[i].label, x, 300);
+      fill(255);
+      text(objectResults[i].label, x, 280);
       x += 150
     }
     textSize(24);
-    text("Was this correct?", 960, 375);
+    fill(255);
+    text("Was this correct?", 960, 350);
     if (!incorrectB) {
       incorrectB = createButton('No');
       incorrectB.mousePressed(decreaseScore);
-      incorrectB.position(950, 450);
+      incorrectB.position(980, 400);
       correctB = createButton('Yes');
       correctB.mousePressed(increaseScore);
-      correctB.position(850, 450);
+      correctB.position(880, 400);
     }
     incorrectB.show();
     correctB.show();
