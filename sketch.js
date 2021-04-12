@@ -1,8 +1,9 @@
 var detector;
 var myVid;
 var objectResults = [];
-var guessB, correctB, incorrectB;
+var guessB;
 var guessed = false;
+var slider;
 var score = 0;
 
 function preload() {
@@ -12,11 +13,15 @@ function preload() {
 function setup() {
   createCanvas(1280, 480);
   textAlign(CENTER);
-
   myVid = createCapture(VIDEO, videoLoaded);
+
   guessB = createButton('Guess!');
   guessB.mousePressed(printGuess);
-  guessB.position(930, 175);
+  guessB.position(930, 120);
+  slider = createSlider(0,10,0,1);
+  slider.position(890,420);
+  slider.mouseReleased(increaseScore);
+  slider.hide();
 }
 
 function videoLoaded() {
@@ -51,30 +56,27 @@ function draw() {
   fill(0,255,0);
   noStroke();
   textSize(32);
-  text("Score: " + score, 960, 100);
+  text("Score: " + score, 960, 75);
 
-  //when they press the guess button
+  //when they press the guess button- prints labels and slider
   if (guessed) {
     var x = 800
+    var y = 210;
     for (var i = 0; i < objectResults.length; i++) {
       fill(255);
-      text(objectResults[i].label, x, 280);
+      text(objectResults[i].label, x, y);
       x += 150
+      if (x> width-160) {
+        y +=50;
+        x=800;
+      }
     }
     textSize(24);
     fill(255);
-    text("Was this correct?", 960, 350);
-    if (!incorrectB) {
-      incorrectB = createButton('No');
-      incorrectB.mousePressed(decreaseScore);
-      incorrectB.position(980, 400);
-      correctB = createButton('Yes');
-      correctB.mousePressed(increaseScore);
-      correctB.position(880, 400);
-    }
-    incorrectB.show();
-    correctB.show();
-  } 
+    text("How many were correct?", 960, 340);
+    slider.show();
+    text(slider.value(), 960,390)
+   } 
 }
 
 function printGuess() {
@@ -82,15 +84,7 @@ function printGuess() {
 }
 
 function increaseScore() {
-  score += 1;
+  score += int(slider.value());
   guessed = false;
-  incorrectB.hide();
-  correctB.hide();
-}
-
-function decreaseScore() {
-  score -= 1;
-  guessed = false;
-  incorrectB.hide();
-  correctB.hide();
+  slider.hide();
 }
